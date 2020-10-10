@@ -11,7 +11,7 @@ const HelpMenu = new Discord.MessageEmbed()
     .setTitle('Invite me!')
     .setURL('https://discord.com/api/oauth2/authorize?client_id=723495135635308604&permissions=116780352&scope=bot')
     .setAuthor('Soundy Bot', 'https://media.discordapp.net/attachments/679757991771242497/761301672927428618/logo.png?width=677&height=677')
-    .setDescription('\nsoundy help (This command)\n\n**SOUND EFFECTS**\nsoundy works - The first sound\nsoundy bruh - Deception in a nutshell\nsoundy cash - yea monehh!\nsoundy crickets - Silence\nsoundy dial - Wait did we get back to the 90\'?\nsoundy fbi - Fb1 0p3N Up!!1!\nsoundy illuminati - *Content moderated*\nsoundy oof - We both know you already know\nsoundy ps2 - SO LOUDDDDDDD\nsoundy sad - When soundy stop becomes your friend\nsoundy wow - WOAAAAH\nsoundy yay - Happiness in a nutshell\nsoundy bulding - Don\'t be racist! >:\"(\nsoundy hello - H3l0u\nsoundy nope - TF2 in a nutshell\nsoundy thanks - Ugly god\n\n**FUN**\nsoundy flipacoin - Flips a coin\n\n**INFO**\nsoundy ping - Shows the bot ping\nsoundy invite - Invite me! ^^')
+    .setDescription('\nsoundy help (This command)\n\n**SOUND EFFECTS**\nsoundy stop - Stops the fun u-u\n\nsoundy works - The first sound\nsoundy bruh - Deception in a nutshell\nsoundy cash - yea monehh!\nsoundy crickets - Silence\nsoundy dial - Wait did we get back to the 90\'?\nsoundy fbi - Fb1 0p3N Up!!1!\nsoundy illuminati - *Content moderated*\nsoundy oof - We both know you already know\nsoundy ps2 - SO LOUDDDDDDD\nsoundy sad - When soundy stop becomes your friend\nsoundy wow - WOAAAAH\nsoundy yay - Happiness in a nutshell\nsoundy bulding - Don\'t be racist! >:\"(\nsoundy hello - H3l0u\nsoundy nope - TF2 in a nutshell\nsoundy thanks - Ugly god\n\n**FUN**\nsoundy flipacoin - Flips a coin\n\n**INFO**\nsoundy ping - Shows the bot ping\nsoundy invite - Invite me! ^^')
     .setFooter('Logo design by TriyPlus', 'https://media.discordapp.net/attachments/679757991771242497/729002585041928252/unknown.png?width=677&height=677');
 
 const InviteMenu = new Discord.MessageEmbed()
@@ -34,6 +34,7 @@ Client.on('message', message => {
             console.log (isReady)
             voiceChannel.join().then(connection =>
             {
+                message.guild.me.voice.setDeaf(true);
                 const dispatcher = connection.play('./Audio/' + Filename);
                 dispatcher.on("finish", end => {
                     voiceChannel.leave()
@@ -48,19 +49,26 @@ Client.on('message', message => {
     const args = message.content.slice(prefix.length).trim().split(' ');
     const command = args.shift().toLowerCase();
     if (!message.content.startsWith(prefix) || message.author.bot) return;
-    else if (isReady) {
+    else if (isReady || command == "stop") {
         console.log(command)
         console.log(args)
         switch(command){
+            case "stop":
+                if (message.guild.me.voice.channel != null){
+                    message.guild.me.voice.channel.leave();
+                    isReady = true
+                }else
+                message.channel.send("Umm what do you want to stop? xD")
+                break
             case "help":
                 message.channel.send(HelpMenu);
                 console.log("Help needed!")
                 break
             case "flipacoin":
                 if (Math.floor((Math.random() * 2) + 1) == 1){
-                    message.channel.send("You got cross :\"\"0")
+                    message.channel.send("You got head :\"\"0")
                 }else{
-                    message.channel.send("You got face :\"\"0")
+                    message.channel.send("You got tail :\"\"0")
                 }
                 break
             case "ping":
@@ -93,10 +101,6 @@ Client.on('message', message => {
     }
     else if (isReady == false)
     {
-        if (command == "stop"){
-            message.guild.me.voice.channel.leave();
-            isReady = true
-        }else
         message.channel.send("Hold on a second! I'm busy ")
     }
 });
