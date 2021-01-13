@@ -1,23 +1,7 @@
-const Discord = require("discord.js");
-const Client = new Discord.Client();
-const token = require("./token.js");
-const prefix = "soundy "
-const fs = require('fs')
-const os = require("os-utils")
+const { Discord, ytdl, Client, token, prefix, fs, os, HelpMenu, InviteMenu, tts, util } = require("./Modules/Variables.js");
+const { validateYouTubeUrl, SaveTTS } = require("./Modules/Functions.js");
+
 var isReady = true;
-
-const HelpMenu = new Discord.MessageEmbed()
-    .setColor('#bc02d9')
-    .setTitle('Invite me!')
-    .setURL('https://discord.com/api/oauth2/authorize?client_id=723495135635308604&permissions=116780352&scope=bot')
-    .setAuthor('Soundy Bot', 'https://media.discordapp.net/attachments/679757991771242497/761301672927428618/logo.png?width=677&height=677')
-    .setDescription('\nsoundy help (This command)\n\n**SOUND EFFECTS**\nsoundy stop - Stops the fun u-u\n\nsoundy works - The first sound\nsoundy bruh - Deception in a nutshell\nsoundy cash - yea monehh!\nsoundy crickets - Silence\nsoundy dial - Wait did we get back to the 90\'?\nsoundy fbi - Fb1 0p3N Up!!1!\nsoundy illuminati - *Content moderated*\nsoundy oof - We both know you already know\nsoundy ps2 - SO LOUDDDDDDD\nsoundy sad - When soundy stop becomes your friend\nsoundy wow - WOAAAAH\nsoundy yay - Happiness in a nutshell\nsoundy bulding - Don\'t be racist! >:\"(\nsoundy hello - H3l0u\nsoundy nope - TF2 in a nutshell\nsoundy thanks - Ugly god\n\n**FUN**\nsoundy flipacoin - Flips a coin\n\n**INFO**\nsoundy ping - Shows the bot ping\nsoundy invite - Invite me! ^^')
-    .setFooter('Logo design by TriyPlus', 'https://media.discordapp.net/attachments/679757991771242497/729002585041928252/unknown.png?width=677&height=677');
-
-const InviteMenu = new Discord.MessageEmbed()
-    .setColor('#bc02d9')
-    .setTitle('Invite me! :\")')
-    .setURL('https://discord.com/api/oauth2/authorize?client_id=723495135635308604&permissions=116780352&scope=bot')
 
 Client.on('ready', () => {
     console.log("Logged in!");
@@ -25,34 +9,41 @@ Client.on('ready', () => {
 });
 
 Client.on('message', message => {
-    function Play(Filename) {
-        var voiceChannel = message.member.voice.channel;
-        console.log(voiceChannel)
-        if (voiceChannel != null)
-        {
-            isReady = false
-            console.log (isReady)
-            voiceChannel.join().then(connection =>
+    function Play(Wtp) {
+        try{
+            var voiceChannel = message.member.voice.channel;
+            if (voiceChannel != null)
             {
-                message.guild.me.voice.setDeaf(true);
-                const dispatcher = connection.play('./Audio/' + Filename);
-                dispatcher.on("finish", end => {
-                    voiceChannel.leave()
-                    isReady = true;
-                });
-            }).catch(err => console.log(err));
-        }else{
-            message.channel.send("You\'re not in a voice channel! I don't know what to do :(")
+                isReady = false
+                voiceChannel.join().then(connection =>
+                {
+                    message.guild.me.voice.setSelfDeaf(true)
+                    const dispatcher = connection.play(Wtp);
+                    dispatcher.on("finish", end => {
+                        console.log("Finished")
+                        voiceChannel.leave()
+                        isReady = true;
+                    })
+
+                    dispatcher.on("error", end => {
+                        console.log("Error")
+                        voiceChannel.leave()
+                        isReady = true;
+                    })
+                }).catch(err => console.log(err));
+            }else{
+                message.channel.send("You\'re not in a voice channel! I don't know what to do :(")
+            }
+        }catch(err){
+            console.log("Failed to play an audio")
+            console.log(err)
         }
     }
-
     const args = message.content.slice(prefix.length).trim().split(' ');
-    const command = args.shift().toLowerCase();
+    const command = args.shift()
     if (!message.content.startsWith(prefix) || message.author.bot) return;
-    else if (isReady || command == "stop") {
-        console.log(command)
-        console.log(args)
-        switch(command){
+    else if (isReady || command.toLowerCase() == "stop") {
+        switch(command.toLowerCase()){
             case "stop":
                 if (message.guild.me.voice.channel != null){
                     message.guild.me.voice.channel.leave();
@@ -62,7 +53,6 @@ Client.on('message', message => {
                 break
             case "help":
                 message.channel.send(HelpMenu);
-                console.log("Help needed!")
                 break
             case "flipacoin":
                 if (Math.floor((Math.random() * 2) + 1) == 1){
@@ -72,7 +62,6 @@ Client.on('message', message => {
                 }
                 break
             case "ping":
-                var ping = Date.now() - message.createdTimestamp + " ms";
                 message.channel.send("The ping is \"" + `${message.createdTimestamp - Date.now()}` + " ms\"");
                 break
             case "invite":
@@ -83,16 +72,51 @@ Client.on('message', message => {
                     message.channel.send("Take some info about my life!\n\n**System Info**:\n```\nCpu Usage: " + Math.round(v) + "%\nUsed Memory: " + Math.round(os.freememPercentage()) + "%\n```")
                 });
                 break
-            default:
-                console.log(command + ".mp3")
+            case "eval":
+                if(message.author.id !== "561560432100245520"){
+                    message.channel.send("Woah there you know Eval is dangerous af");
+                    return;
+                }
                 try {
-                    if (fs.existsSync('./Audio/' + command + ".mp3")) {
+                    const code = args.join(" ");
+                    let evaled = eval(code);
+ 
+                    if (typeof evaled !== "string")
+                        evaled = require("util").inspect(evaled);
+ 
+                    message.channel.send(evaled, {code:"xl"});
+                } catch (err) {
+                    message.channel.send("\`ERROR\` \`\`\`xl\n${(err)}\n\`\`\`");
+                }
+                break
+            case "tts":
+                message.delete();
+                if (args.length > 0){
+                        SaveTTS(Play("TTS.mp3"), message.content.split(' ').splice(2).join(' '))
+                        message.reply(" said \"" + message.content.split(' ').splice(2).join(' ') + "\" in VC")
+                }else
+                message.channel.send("It would be good if you uuuh... Provided text")
+                break
+            default:
+                try {
+                    if (fs.existsSync('./Audio/' + command.toLowerCase() + ".mp3")) {
                       //file exists
-                      console.log(("./Audio/" + command + ".mp3" + " Exists!"))
+                      console.log(("./Audio/" + command.toLowerCase() + ".mp3" + " Exists!"))
                       message.delete();
-                      Play(command + ".mp3")
-                    }else
-                    message.channel.send("I can't find that! o.O")
+                      Play('./Audio/' + command.toLowerCase() + ".mp3")
+                    }else{
+                        console.log("Unexisting file")
+                        try{
+                            if (validateYouTubeUrl(command) == true){
+                                Play(ytdl(command, {quality: 'highestaudio', filter: "audioonly"}))
+                                message.delete();
+                            }else
+                            message.channel.send("I can't find that! o.O")
+                        }catch(err){
+                            message.channel.send("I can't find that! o.O")
+                            return console.log(err);
+                        }
+                    }
                 } catch(err) {
                     console.error(err)
                   }
