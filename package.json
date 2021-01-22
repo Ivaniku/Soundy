@@ -9,7 +9,7 @@
     "google-translate-tts": "^0.3.0",
     "opusscript": "^0.0.7",
     "os-utils": "0.0.14",
-    "ytdl-core": "^4.4.2"
+    "ytdl-core": "^4.4.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

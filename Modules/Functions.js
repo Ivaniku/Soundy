@@ -1,19 +1,5 @@
 const { tts, fs } = require("./Variables.js");
 
-function validateYouTubeUrl(Link){
-    var url = Link
-        if (url != undefined || url != '') {
-            var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
-            var match = url.match(regExp);
-            if (match && match[2].length == 11) {
-                return(true)
-            }
-            else {
-                return(false)
-            }
-        }
-}
-
 async function SaveTTS(_callback, Input){
     try{
         const buffer = await tts.synthesize({
@@ -22,7 +8,7 @@ async function SaveTTS(_callback, Input){
             slow: false // optional
         });
 
-        fs.writeFileSync('TTS.mp3', buffer);
+        fs.writeFileSync('TTS.mp3', buffer)
         _callback
     } catch(err) {
         console.log("TTS error")
@@ -32,9 +18,9 @@ async function SaveTTS(_callback, Input){
             slow: false // optional
         });
 
-        fs.writeFileSync('TTS.mp3', buffer);
+        fs.writeFileSync('TTS.mp3', buffer)
         _callback
     }
 };
 
-module.exports = { validateYouTubeUrl, SaveTTS };
+module.exports = { SaveTTS };
