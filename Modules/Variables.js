@@ -39,7 +39,14 @@ const ActivitiesList = [
     "Get ready for the Luka Luka night fever",
     "The sun is a deadly lazer",
     "I crashed a server node!",
-    "Users = Stonks"
+puntillol59-patch-1
+    "Users = Stonks",
+    "Hiding in a nuclear bunker",
+    "Insert JoJo refrence here",
+    "With your feelings",
+    "Starting a riot",
+    "Locaing area 52"
+node.js
 ];
 
 const HelpMenu = new Discord.MessageEmbed()
