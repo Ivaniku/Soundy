@@ -8,7 +8,6 @@ const fs = require('fs')
 const util = require('util');
 
 const ActivitiesList = [
-    "The bot is going through some problems that may be fixed in 3 days. The core features will still work as intended <3",
     "The bot for VC utilities!",
     "Special thanks to TriyPlus",
     "Vote for Soundy next president! #Soundy2024",
@@ -44,7 +43,11 @@ const ActivitiesList = [
     "Insert JoJo refrence here",
     "With your feelings",
     "Starting a riot",
-    "Locaing area 52"
+    "Locating area 52",
+    "Listening to some Vocaloid tunes",
+    "Translating some tohou songs to english",
+    "Cats are modern",
+    "Minecraft is cool!"
 ];
 
 const HelpMenu = new Discord.MessageEmbed()
