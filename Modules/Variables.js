@@ -36,9 +36,9 @@ const ActivitiesList = [
     "Watching DhillyHub",
     "Eating lolis",
     "Your left sock is praying Kagamine Rin",
-    "Get ready for the Luka Luka night fever"
-    "The sun is a deadly lazer"
-    "I crashed a server node!"
+    "Get ready for the Luka Luka night fever",
+    "The sun is a deadly lazer",
+    "I crashed a server node!",
     "Users = Stonks"
 ];
 
