@@ -36,10 +36,15 @@ const ActivitiesList = [
     "Watching DhillyHub",
     "Eating lolis",
     "Your left sock is praying Kagamine Rin",
-    "Get ready for the Luka Luka night fever"
-    "The sun is a deadly lazer"
-    "I crashed a server node!"
-    "Users = Stonks"
+    "Get ready for the Luka Luka night fever",
+    "The sun is a deadly lazer",
+    "I crashed a server node!",
+    "Users = Stonks",
+    "Hiding in a nuclear bunker",
+    "Insert JoJo refrence here",
+    "With your feelings",
+    "Starting a riot",
+    "Locaing area 52"
 ];
 
 const HelpMenu = new Discord.MessageEmbed()
