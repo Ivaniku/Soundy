@@ -35,22 +35,25 @@ Client.on('message', message => {
             voiceChannel = message.member.voice.channel;
             if (voiceChannel != null)
             {
-                isReady = false
-                voiceChannel.join().then(connection =>
-                {
-                    message.guild.me.voice.setSelfDeaf(true)
-                    const dispatcher = connection.play(Wtp);
-                    dispatcher.on("finish", end => {
-                        voiceChannel.leave()
-                        isReady = true;
-                    })
+                if (voiceChannel.joinable){
+                    isReady = false
+                    voiceChannel.join().then(connection =>
+                    {
+                        message.guild.me.voice.setSelfDeaf(true)
+                        const dispatcher = connection.play(Wtp);
+                        dispatcher.on("finish", end => {
+                            voiceChannel.leave()
+                            isReady = true;
+                        })
 
-                    dispatcher.on("error", end => {
-                        console.error()
-                        voiceChannel.leave()
-                        isReady = true;
-                    })
-                }).catch(err => console.log(err));
+                        dispatcher.on("error", end => {
+                            console.error()
+                            voiceChannel.leave()
+                            isReady = true;
+                        })
+                    }).catch(err => console.log(err));
+                }else
+                message.channel.send("I don't have access to that voice channel! I don't know what to do :(")
             }else{
                 message.channel.send("You\'re not in a voice channel! I don't know what to do :(")
             }
@@ -155,16 +158,6 @@ Client.on('message', message => {
     //So I also made an error handler inside.
     else if (isReady == false)
     {
-        if (isReady == true){
-            //This is when the bot detects that it's broken and DM's me,
-            //it tries to make some fixes like declaring the variables again and setting isReady to true
-            message.channel.send("Hold on! An unknown error occured")
-            Client.users.cache.get("561560432100245520").send("An error occured, check it lazy dumbass https://cp.something.host/services/1509%22%22 ");
-            const { Discord, Client, token, prefix, fs, os, HelpMenu, InviteMenu, tts, util, ActivitiesList } = require("./Modules/Variables.js");
-            const { SaveTTS } = require("./Modules/Functions.js");
-
-            isReady = true;
-        }else
         message.channel.send("Hold on a second! I'm busy")
     }
 });
