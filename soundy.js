@@ -36,22 +36,25 @@ Client.on('message', message => {
             voiceChannel = message.member.voice.channel;
             if (voiceChannel != null)
             {
-                isReady = false
-                voiceChannel.join().then(connection =>
-                {
-                    message.guild.me.voice.setSelfDeaf(true)
-                    const dispatcher = connection.play(Wtp);
-                    dispatcher.on("finish", end => {
-                        voiceChannel.leave()
-                        isReady = true;
-                    })
+                if (voiceChannel.joinable){
+                    isReady = false
+                    voiceChannel.join().then(connection =>
+                    {
+                        message.guild.me.voice.setSelfDeaf(true)
+                        const dispatcher = connection.play(Wtp);
+                        dispatcher.on("finish", end => {
+                            voiceChannel.leave()
+                            isReady = true;
+                        })
 
-                    dispatcher.on("error", end => {
-                        console.error()
-                        voiceChannel.leave()
-                        isReady = true;
-                    })
-                }).catch(err => console.log(err));
+                        dispatcher.on("error", end => {
+                            console.error()
+                            voiceChannel.leave()
+                            isReady = true;
+                        })
+                    }).catch(err => console.log(err));
+                }else
+                message.channel.send("I don't have access to that voice channel! I don't know what to do :(")
             }else{
                 message.channel.send("You\'re not in a voice channel! I don't know what to do :(")
             }
