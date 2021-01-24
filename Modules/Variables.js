@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
-const tts = require('google-translate-tts');
+const util = require("util");
+const fs = require("fs")
+const os = require("os")
 const Client = new Discord.Client();
+const prefix = "beta "
 const token = require("./Token.js");
-const prefix = "soundy "
-const os = require("os-utils")
-const fs = require('fs')
-const util = require('util');
+const tts = require("google-translate-tts");
 
 const ActivitiesList = [
     "The bot for VC utilities!",
@@ -50,12 +50,29 @@ const ActivitiesList = [
     "Minecraft is cool!"
 ];
 
+const Languages = [
+    "en",
+    "es",
+    "fr",
+    "ja",
+    "ru"
+]
+
 const HelpMenu = new Discord.MessageEmbed()
     .setColor('#0f27ff')
     .setTitle('Invite me!')
     .setURL('https://discord.com/api/oauth2/authorize?client_id=723495135635308604&permissions=116780352&scope=bot')
     .setAuthor('Soundy Bot', 'https://cdn.discordapp.com/avatars/723495135635308604/0bf58bdb05d831ddb38f18ddd12dd7ca.png?size=4096')
-    .setDescription('Prefix: "soundy "\n\nsoundy help (This command)\n\n**SOUND EFFECTS**\nstop - Stops the fun u-u\n\nworks - The first sound\nbruh - Deception in a nutshell\ncash - yea monehh!\ncrickets - Silence\ndial - Wait did we get back to the 90\'?\nfbi - Fb1 0p3N Up!!1!\nilluminati - *Content moderated*\noof - We both know you already know\nps2 - SO LOUDDDDDDD\nsad - When stop\nwow - WOAAAAH\nyay - Happiness in a nutshell\nbulding - Don\'t be racist! >:\"(\nhello - H3l0u\nnope - TF2 in a nutshell\nthanks - Ugly god\n\n**FUN**\nflipacoin - Flips a coin\ntts <text> - Plays a tts audio in VC\nsay <text> - Says something for you\nsnipe - Sends the last TTS message\n\n**INFO**\nping - Shows the bot ping\ninvite - Invite me! ^^')
+    .setDescription('Prefix: "soundy "\n\nsoundy help (This command)\n\n**SOUND EFFECTS**\nstop - Stops the fun u-u\n\nworks - The first sound\nbruh - Deception in a nutshell\ncash - yea monehh!\ncrickets - Silence\ndial - Wait did we get back to the 90\'?\nfbi - Fb1 0p3N Up!!1!\nilluminati - *Content moderated*\noof - We both know you already know\nps2 - SO LOUDDDDDDD\nsad - When stop\nwow - WOAAAAH\nyay - Happiness in a nutshell\nbulding - Don\'t be racist! >:\"(\nhello - H3l0u\nnope - TF2 in a nutshell\nthanks - Ugly god\n\n**FUN**\nflipacoin - Flips a coin\ntts <text> - Plays a tts audio in VC\nsay <text> - Says something for you\nsnipe - Sends the last TTS message\n\n**INFO**\nping - Shows the bot ping\ninvite - Invite me to your server! ^^\nvote - Vote me!\n\n**UTILITY**\nconfig - Customise Soundy for your server!')
+    .addField("_ _", "[Join the support server](https://discord.gg/FSzH9Wsr9U)")
+    .setFooter('Logo design by TriyPlus', 'https://cdn.discordapp.com/avatars/678328276573225034/c8919017ebe77b5016d5fe1770918cfa.png?size=4096');
+
+const ConfigMenu = new Discord.MessageEmbed()
+    .setColor('#0f27ff')
+    .setTitle('Invite me!')
+    .setURL('https://discord.com/api/oauth2/authorize?client_id=723495135635308604&permissions=116780352&scope=bot')
+    .setAuthor('Soundy Bot', 'https://cdn.discordapp.com/avatars/723495135635308604/0bf58bdb05d831ddb38f18ddd12dd7ca.png?size=4096')
+    .setDescription("Note: Only people with the manage server permission can modify the configurations!\n\nlang <language code> - Change the language of the tts\ndisable <command> - Disable a specific command\nenable <command> - Enable a disabled command\nrestore - Restore the configurations\nexport - Export your configurations")
     .addField("_ _", "[Join the support server](https://discord.gg/FSzH9Wsr9U)")
     .setFooter('Logo design by TriyPlus', 'https://cdn.discordapp.com/avatars/678328276573225034/c8919017ebe77b5016d5fe1770918cfa.png?size=4096');
 
@@ -64,4 +81,15 @@ const InviteMenu = new Discord.MessageEmbed()
     .setTitle('Invite me! :\")')
     .setURL('https://discord.com/api/oauth2/authorize?client_id=723495135635308604&permissions=116780352&scope=bot')
 
-module.exports = { Discord, Client, token, prefix, fs, os, HelpMenu, InviteMenu, tts, util, ActivitiesList };
+const VoteMenu = new Discord.MessageEmbed()
+    .setColor('#0f27ff')
+    .setTitle('Vote me!')
+    .setURL('https://discord.com/api/oauth2/authorize?client_id=723495135635308604&permissions=116780352&scope=bot')
+    .setAuthor('Soundy Bot', 'https://cdn.discordapp.com/avatars/723495135635308604/0bf58bdb05d831ddb38f18ddd12dd7ca.png?size=4096')
+    .setDescription("I\'m in a variety of bot lists and it would really help me out if you vote me in one of those ^^\n")
+    .addField("My Top.gg page", "[top.gg](https://top.gg/bot/723495135635308604)")
+    .addField("Me DiscordBotList page", "[discordbotlist.com](https://discordbotlist.com/bots/soundy-1861)")
+    .addField("My Discord Bots page", "[discord.bots.gg](https://discord.bots.gg/bots/723495135635308604)")
+    .setFooter('Logo design by TriyPlus', 'https://cdn.discordapp.com/avatars/678328276573225034/c8919017ebe77b5016d5fe1770918cfa.png?size=4096');
+
+module.exports = { Discord, Client, token, prefix, fs, os, HelpMenu, InviteMenu, tts, util, ActivitiesList, VoteMenu, Languages, ConfigMenu };

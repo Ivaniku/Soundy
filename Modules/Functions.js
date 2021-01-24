@@ -1,10 +1,10 @@
 const { tts, fs } = require("./Variables.js");
 
-async function SaveTTS(_callback, Input){
+async function SaveTTS(_callback, Input, Lang){
     try{
         const buffer = await tts.synthesize({
             text: Input,
-            voice: 'en-UK',
+            voice: Lang,
             slow: false // optional
         });
 

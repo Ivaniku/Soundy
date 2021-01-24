@@ -1,0 +1,11 @@
+{
+    "Languages": {
+        "en": "en-GB",
+        "es": "es-ES",
+        "fr": "fr-FR",
+        "ja": "ja-JP",
+        "ru": "ru-RU"
+    },
+    
+    "Commands": ["help", "works", "bruh", "cash", "crickets", "dial", "fbi", "illuminati", "oof", "ps2", "sad", "wow", "yay", "bulding", "hello", "nope", "thanks", "flipacoin", "tts", "say", "snipe", "ping", "invite", "vote"]
+}
