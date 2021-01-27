@@ -65,7 +65,7 @@ Client.on('message', message => {
         }
     }
     //This piece of code is executed when the message that is sent doesn't contain the Soundy prefix. Do not touch.
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (!message.content.startsWith(prefix) || message.author.bot || message.channel instanceof Discord.DMChannel ) return;
     else if (isReady || command.toLowerCase() == "stop" || command.toLowerCase() == "eval") {
         //This checks the config file of the server
         if (fs.existsSync("./ServerConfigs/" + message.guild.id + ".json")){
