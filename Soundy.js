@@ -62,13 +62,11 @@ Client.on('message', message => {
                 fs.unlinkSync("./ServerConfigs/" + message.guild.id + ".json")
                 fs.copyFileSync("./ServerConfigs/Template.json", "./ServerConfigs/" + message.guild.id + ".json", fs.constants.COPYFILE_EXCL, (err) => {
                     if (err) throw err;
-                    console.log('File was copied to destination');
                 });
             }
         }else
         fs.copyFileSync("./ServerConfigs/Template.json", "./ServerConfigs/" + message.guild.id + ".json", fs.constants.COPYFILE_EXCL, (err) => {
             if (err) throw err;
-            console.log('File was copied to destination');
         });
 
         //This is the switch statement that contains all the commands, i'm pretty happy i used a switch. It makes the code look a lot prettier and more efficient. Adding a command is also very easy.
@@ -145,11 +143,8 @@ Client.on('message', message => {
             case "config":
                 if (message.member.hasPermission('MANAGE_GUILD')) {
                     if (args.length > 0){
-                        console.log(args)
                         switch(args[0].toLowerCase()){
                             case "lang":
-                                console.log(args.length = 2)
-                                console.log(Languages.includes(args[1]))
                                 if (args.length == 2 && Languages.includes(args[1])){
                                     let File = JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json"))
                                     File.Lang = args[1]
