@@ -7,7 +7,8 @@
     "@discordjs/opus": "^0.3.2",
     "discord.js": "^12.3.1",
     "edit-json-file": "^1.5.0",
-    "google-translate-tts": "^0.3.0",
+    "google-tts-api": "^2.0.1",
+    "gtts": "^0.1.1",
     "opusscript": "^0.0.7",
     "os-utils": "0.0.14",
     "ytdl-core": "^4.4.3"
