@@ -76,7 +76,7 @@ const ConfigMenu = new Discord.MessageEmbed()
     .setTitle('Invite me!')
     .setURL('https://discord.com/api/oauth2/authorize?client_id=723495135635308604&permissions=116780352&scope=bot')
     .setAuthor('Soundy Bot', 'https://cdn.discordapp.com/avatars/723495135635308604/0bf58bdb05d831ddb38f18ddd12dd7ca.png?size=4096')
-    .setDescription("Note: Only people with the manage server permission can modify the configurations!\n\nlang <language code> - Change the language of the tts\ndisable <command> - Disable a specific command\nenable <command> - Enable a disabled command\nrestore - Restore the configurations\nexport - Export your configurations")
+    .setDescription("Note: Only people with the manage server permission can modify the configurations!\n\nlang <language code> - Change the language of the tts\ndisable <command> - Disable a specific command\nenable <command> - Enable a disabled command\nrestore - Restore the configurations")
     .addField("_ _", "[Join the support server](https://discord.gg/FSzH9Wsr9U)")
     .setFooter('Logo design by TriyPlus', 'https://cdn.discordapp.com/avatars/678328276573225034/c8919017ebe77b5016d5fe1770918cfa.png?size=4096');
 

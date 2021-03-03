@@ -177,15 +177,8 @@ Client.on('message', message => {
                                     if (err) throw err;
                                 });
                                 break
-                            case "export":
-                                if (args.length == 1){
-                                    fs.unlinkSync("./Temp/Config.soundy")
-                                    fs.copyFileSync("./ServerConfigs/" + message.guild.id + ".json", "./Temp/Config.soundy", fs.constants.COPYFILE_EXCL, (err) => {
-                                        if (err) throw err;
-                                    });
-                                    message.channel.send("Here you have", {files: ["./Temp/Config.soundy"]})
-                                }
-                                break
+                            default:
+                                message.channel.send("*the hell is that configuration, never heard of it*")
                         }
                         message.channel.send
                     }else
@@ -194,7 +187,7 @@ Client.on('message', message => {
                 message.channel.send("You need the manage server permission to change the guild configuration :no_entry:")
                 break
             default:
-                //This code executes when none of the commands are executed and searchs for a sound. This is a very efficient way fo doing it.
+                //This code executes when none of the commands are executed and searchs for a sound. This is a very efficient way of doing it.
                 try {
                     if (fs.existsSync('./Audio/' + command.toLowerCase() + ".mp3")) {
                       message.delete();
