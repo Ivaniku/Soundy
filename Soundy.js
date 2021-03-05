@@ -1,5 +1,6 @@
+"use strict";
 //This part of the code initializes all variables from the Modules folder. Remember to change it whenever you install a dependency. 
-const { Discord, Client, token, prefix, fs, HelpMenu, InviteMenu, tts, util, ActivitiesList, VoteMenu, Languages, ConfigMenu } = require("./Modules/Variables.js");
+const { Discord, Client, token, prefix, fs, HelpMenu, InviteMenu, tts, util, ActivitiesList, VoteMenu, Languages, ConfigMenu, EditCharaMenu } = require("./Modules/Variables.js");
 const { SaveTTS } = require("./Modules/Functions.js");
 const { strike } = require("./Modules/Token.js");
 
@@ -140,13 +141,70 @@ Client.on('message', message => {
                 //Hahaha inspiration on dankmemer go brrrrr
                 message.channel.send("Here you have", {files: ["./TTS.mp3"]})
                 break
+            case "character":
+                try{
+                    if (!fs.existsSync("./CanonCharas/Users/" + message.author.id + ".json"))
+                    fs.copyFileSync("./CanonCharas/Users/Template.json", "./CanonCharas/Users/" + message.author.id + ".json", fs.constants.COPYFILE_EXCL, (err) => {
+                        if (err) throw err;
+                    });
+                    message.channel.send({embed: {
+                        color: "#0f27ff",
+                        title: JSON.parse(fs.readFileSync("./CanonCharas/Users/" + message.author.id + ".json")).Nickname,
+                        description: JSON.parse(fs.readFileSync("./CanonCharas/Users/" + message.author.id + ".json")).Description,
+                        thumbnail: {
+                            url: JSON.parse(fs.readFileSync("./CanonCharas/Users/" + message.author.id + ".json")).Image,
+                        },
+                    }
+                    })
+                }catch(err){
+                    console.log(err)
+                }
+                break
+            case "editchara":
+                if (!fs.existsSync("./CanonCharas/Users/" + message.author.id + ".json"))
+                fs.copyFileSync("./CanonCharas/Users/Template.json", "./CanonCharas/Users/" + message.author.id + ".json", fs.constants.COPYFILE_EXCL, (err) => {
+                    if (err) throw err;
+                });
+                if (args.length > 0){
+                    let File
+                    switch(args[0].toLowerCase()){
+                        case "name":
+                            if (args.length == 2 && message.content.split(' ').splice(3).join(' ').length < 32){
+                                File = JSON.parse(fs.readFileSync("./CanonCharas/Users/" + message.author.id + ".json"))
+                                File.Nickname = message.content.split(' ').splice(3).join(' ')
+                                fs.writeFileSync("./CanonCharas/Users/" + message.author.id + ".json", JSON.stringify(File, null, 2));
+                                message.channel.send("Done!")
+                            }else
+                            message.channel.send("Hmmm, that\'s uncool")
+                            break
+                        case "desc":
+                            File = JSON.parse(fs.readFileSync("./CanonCharas/Users/" + message.author.id + ".json"))
+                            File.Description = message.content.split(' ').splice(3).join(' ')
+                            fs.writeFileSync("./CanonCharas/Users/" + message.author.id + ".json", JSON.stringify(File, null, 2));
+                            message.channel.send("Done!")
+                            break
+                        case "image":
+                            if (args.length > 1){
+                                File = JSON.parse(fs.readFileSync("./CanonCharas/Users/" + message.author.id + ".json"))
+                                File.Image = message.content.split(' ').splice(3).join(' ')
+                                fs.writeFileSync("./CanonCharas/Users/" + message.author.id + ".json", JSON.stringify(File, null, 2));
+                                message.channel.send("Done!")
+                            }else
+                            message.channel.send("You need to provide an image url! It can be something like imgur")
+                            break
+                        default:
+                            message.channel.send(EditCharaMenu)
+                        }
+                    }else
+                    message.channel.send(EditCharaMenu)
+                break
             case "config":
                 if (message.member.hasPermission('MANAGE_GUILD')) {
                     if (args.length > 0){
                         switch(args[0].toLowerCase()){
                             case "lang":
                                 if (args.length == 2 && Languages.includes(args[1])){
-                                    let File = JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json"))
+                                    File = JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json"))
                                     File.Lang = args[1]
                                     fs.writeFileSync("./ServerConfigs/" + message.guild.id + ".json", JSON.stringify(File, null, 2));
                                     message.channel.send("Done!")
@@ -155,7 +213,7 @@ Client.on('message', message => {
                                 break
                             case "disable":
                                 if (args.length == 2 && JSON.parse(fs.readFileSync("./Config.json")).Commands.includes(args[1]) && JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json")).DisabledCommands.includes(args[1]) == false){
-                                    let File = JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json"))
+                                    File = JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json"))
                                     File.DisabledCommands.push(args[1])
                                     fs.writeFileSync("./ServerConfigs/" + message.guild.id + ".json", JSON.stringify(File, null, 2));
                                     message.channel.send("Done!")
@@ -164,7 +222,7 @@ Client.on('message', message => {
                                 break
                             case "enable":
                                 if (args.length == 2 && JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json")).DisabledCommands.includes(args[1])){
-                                    let File = JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json"))
+                                    File = JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json"))
                                     File.DisabledCommands.splice(File.DisabledCommands.indexOf(args[1]), 1);
                                     fs.writeFileSync("./ServerConfigs/" + message.guild.id + ".json", JSON.stringify(File, null, 2));
                                     message.channel.send("Done!")
@@ -178,7 +236,7 @@ Client.on('message', message => {
                                 });
                                 break
                             default:
-                                message.channel.send("*the hell is that configuration, never heard of it*")
+                                message.channel.send(ConfigMenu)
                         }
                         message.channel.send
                     }else
@@ -192,12 +250,10 @@ Client.on('message', message => {
                     if (fs.existsSync('./Audio/' + command.toLowerCase() + ".mp3")) {
                       message.delete();
                       Play('./Audio/' + command.toLowerCase() + ".mp3")
-                    }else{
-                        message.channel.send("I can't find that! o.O")
                     }
-                } catch(err) {
+                }catch(err) {
                     console.error(err)
-                  }
+                }
                 break
         }
     }

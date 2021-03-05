@@ -8,7 +8,7 @@ const fs = require("fs")
 const os = require("os")
 const urlm = require("url")
 const Client = new Discord.Client();
-const prefix = "beta "
+const prefix = "soundy "
 const token = require("./Token.js");
 
 const ActivitiesList = [
@@ -80,6 +80,15 @@ const ConfigMenu = new Discord.MessageEmbed()
     .addField("_ _", "[Join the support server](https://discord.gg/FSzH9Wsr9U)")
     .setFooter('Logo design by TriyPlus', 'https://cdn.discordapp.com/avatars/678328276573225034/c8919017ebe77b5016d5fe1770918cfa.png?size=4096');
 
+const EditCharaMenu = new Discord.MessageEmbed()
+    .setColor('#0f27ff')
+    .setTitle('Invite me!')
+    .setURL('https://discord.com/api/oauth2/authorize?client_id=723495135635308604&permissions=116780352&scope=bot')
+    .setAuthor('Soundy Bot', 'https://cdn.discordapp.com/avatars/723495135635308604/0bf58bdb05d831ddb38f18ddd12dd7ca.png?size=4096')
+    .setDescription("Note: Only the user can modify their own character!\n\nname <text> - Change the name showed at the top of the embed\ndesc <text> - Change your description\nimage <url> - Change the image shown in the embed ")
+    .addField("_ _", "[Join the support server](https://discord.gg/FSzH9Wsr9U)")
+    .setFooter('Logo design by TriyPlus', 'https://cdn.discordapp.com/avatars/678328276573225034/c8919017ebe77b5016d5fe1770918cfa.png?size=4096');
+
 const InviteMenu = new Discord.MessageEmbed()
     .setColor('#0f27ff')
     .setTitle('Invite me! :\")')
@@ -96,4 +105,4 @@ const VoteMenu = new Discord.MessageEmbed()
     .addField("My Discord Bots page", "[discord.bots.gg](https://discord.bots.gg/bots/723495135635308604)")
     .setFooter('Logo design by TriyPlus', 'https://cdn.discordapp.com/avatars/678328276573225034/c8919017ebe77b5016d5fe1770918cfa.png?size=4096');
 
-module.exports = { Discord, Client, token, prefix, fs, os, HelpMenu, InviteMenu, tts, util, ActivitiesList, VoteMenu, Languages, ConfigMenu, path, http, https, urlm };
+module.exports = { Discord, Client, token, prefix, fs, os, HelpMenu, EditCharaMenu, InviteMenu, tts, util, ActivitiesList, VoteMenu, Languages, ConfigMenu, path, http, https, urlm };
