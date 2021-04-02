@@ -4,8 +4,9 @@
         "es": "es-ES",
         "fr": "fr-FR",
         "ja": "ja-JP",
-        "ru": "ru-RU"
+        "ru": "ru-RU",
+        "ca": "ca-ES"
     },
     
-    "Commands": ["help", "works", "bruh", "cash", "crickets", "dial", "fbi", "illuminati", "oof", "ps2", "sad", "wow", "yay", "bulding", "hello", "nope", "thanks", "flipacoin", "tts", "say", "snipe", "ping", "invite", "vote"]
+    "Commands": ["help", "works", "bruh", "cash", "crickets", "dial", "fbi", "illuminati", "oof", "ps2", "sad", "wow", "yay", "bulding", "hello", "nope", "thanks", "flipacoin", "tts", "say", "snipe", "ping", "invite", "vote", "character", "editchara"]
 }

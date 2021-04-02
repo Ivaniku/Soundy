@@ -8,7 +8,7 @@ const fs = require("fs")
 const os = require("os")
 const urlm = require("url")
 const Client = new Discord.Client();
-const prefix = "soundy "
+const prefix = "beta "
 const token = require("./Token.js");
 
 const ActivitiesList = [
@@ -51,7 +51,11 @@ const ActivitiesList = [
     "Listening to some Vocaloid tunes",
     "Translating some tohou songs to english",
     "Cats are modern",
-    "Minecraft is cool!"
+    "Minecraft is cool!",
+    "You're my dearest villager",
+    "Yeah fortnite we 'bout to get down",
+    "Canoncharas are cool!",
+    "Every time you kick Soundy, I cry"
 ];
 
 const Languages = [
@@ -59,15 +63,17 @@ const Languages = [
     "es",
     "fr",
     "ja",
-    "ru"
+    "ru",
+    "ca"
 ]
 
 const HelpMenu = new Discord.MessageEmbed()
     .setColor('#0f27ff')
     .setTitle('Invite me!')
     .setURL('https://discord.com/api/oauth2/authorize?client_id=723495135635308604&permissions=116780352&scope=bot')
-    .setAuthor('Soundy Bot', 'https://cdn.discordapp.com/avatars/723495135635308604/0bf58bdb05d831ddb38f18ddd12dd7ca.png?size=4096')
-    .setDescription('Prefix: "soundy "\n\nsoundy help (This command)\n\n**SOUND EFFECTS**\nleave - Leaves the VC u-u\n\nworks - The first sound\nbruh - Deception in a nutshell\ncash - yea monehh!\ncrickets - Silence\ndial - Wait did we get back to the 90\'?\nfbi - Fb1 0p3N Up!!1!\nilluminati - *Content moderated*\noof - We both know you already know\nps2 - SO LOUDDDDDDD\nsad - When stop\nwow - WOAAAAH\nyay - Happiness in a nutshell\nbulding - Don\'t be racist! >:\"(\nhello - H3l0u\nnope - TF2 in a nutshell\nthanks - Ugly god\n\n**FUN**\nflipacoin - Flips a coin\ntts <text> - Plays a tts audio in VC\nsay <text> - Says something for you\nsnipe - Sends the last TTS message\n\n**INFO**\nping - Shows the bot ping\ninvite - Invite me to your server! ^^\nvote - Vote me!\n\n**UTILITY**\nconfig - Customise Soundy for your server!')
+    .setAuthor('Soundy Commands', 'https://cdn.discordapp.com/avatars/723495135635308604/0bf58bdb05d831ddb38f18ddd12dd7ca.png?size=4096')
+    .setThumbnail('https://cdn.discordapp.com/avatars/723495135635308604/0bf58bdb05d831ddb38f18ddd12dd7ca.png?size=4096')
+    .setDescription('Prefix: "soundy "\n\nsoundy help (This command)\n\n:musical_note: **SOUND EFFECTS**\n\nleave - Leaves the VC u-u\n\nworks - The first sound\nbruh - Deception in a nutshell\ncash - yea monehh!\ncrickets - Silence\ndial - Wait did we get back to the 90\'?\nfbi - Fb1 0p3N Up!!1!\nilluminati - *Content moderated*\noof - We both know you already know\nps2 - SO LOUDDDDDDD\nsad - When stop\nwow - WOAAAAH\nyay - Happiness in a nutshell\nbulding - Don\'t be racist! >:\"(\nhello - H3l0u\nnope - TF2 in a nutshell\nthanks - Ugly god\n\n:person_red_hair: **CANONCHARA**\n\ncharacter - View your canonchara\neditchara - Edit your character\n\n:joy: **FUN**\n\nflipacoin - Flips a coin\ntts <text> - Plays a tts audio in VC\nsay <text> - Says something for you\nsnipe - Sends the last TTS message\n\n:bookmark_tabs: **INFO**\n\nping - Shows the bot ping\ninvite - Invite me to your server! ^^\nvote - Vote me!\n\n:hammer: **UTILITY**\n\nconfig - Customise Soundy for your server!')
     .addField("_ _", "[Join the support server](https://discord.gg/FSzH9Wsr9U)")
     .setFooter('Logo design by TriyPlus', 'https://cdn.discordapp.com/avatars/678328276573225034/c8919017ebe77b5016d5fe1770918cfa.png?size=4096');
 

@@ -1,7 +1,10 @@
 "use strict";
+
+//Welcome to Soundy's messy code! :D
+
 //This part of the code initializes all variables from the Modules folder. Remember to change it whenever you install a dependency. 
 const { Discord, Client, token, prefix, fs, HelpMenu, InviteMenu, tts, util, ActivitiesList, VoteMenu, Languages, ConfigMenu, EditCharaMenu } = require("./Modules/Variables.js");
-const { SaveTTS } = require("./Modules/Functions.js");
+const { SaveTTS, ValidURL, Play } = require("./Modules/Functions.js");
 const { strike } = require("./Modules/Token.js");
 
 //This part of the code is executed when the bot logs in, also used for random status.
@@ -29,31 +32,7 @@ Client.on('message', message => {
     const command = args.shift()
     //This is the Play function, i couldn't declare it in the Modules folder because it wouldn't recognise the variables.
     //I'm pretty sure that declaring it right here is a bad way of doing it and makes the code look messier but it's the only workaround i could find
-    function Play(Wtp) {
-        try{
-            var voiceChannel = message.member.voice.channel;
-            if (voiceChannel != null)
-            {
-                if (voiceChannel.joinable){
-                    voiceChannel.join().then(connection =>
-                    {
-                        message.guild.me.voice.setSelfDeaf(true)
-                        const dispatcher = connection.play(Wtp);
-                        dispatcher.on("finish", end => {
-                            voiceChannel.leave()
-                        })
-                    }).catch(err => console.log(err));
-                }else
-                message.channel.send("I don't have access to that voice channel! I don't know what to do :(")
-            }else{
-                message.channel.send("You\'re not in a voice channel! I don't know what to do :(")
-            }
-        }catch(err){
-            console.log("Failed to play an audio")
-            console.log(err)
-            Client.users.cache.get("561560432100245520").send("An error ocurred playing an audio btw, lemme give you more info: \n```\n" + err + "\n```");
-        }
-    }
+    
     //This piece of code is executed when the message that is sent doesn't contain the Soundy prefix. Do not touch.
     if (!message.content.startsWith(prefix) || message.author.bot || message.channel instanceof Discord.DMChannel ) return;
     else if (message.guild.me.voice.channel == null || command.toLowerCase() == "leave" || command.toLowerCase() == "eval" || command.toLowerCase() == "help") {
@@ -122,10 +101,11 @@ Client.on('message', message => {
             case "tts":
                 //The TTS, the API i'm using is kinda unstable so it sometimes throws unwanted results. But i'm still pretty hapy with it.
                 if (args.length > 0){
-                        if (message.content.split(' ').splice(2).join(' ').length > 200){
-                            message.channel.send5("You savage beast you exceeded the 200 character limit")
-                        }else
-                        SaveTTS(Play("TTS.mp3"), message.content.split(' ').splice(2).join(' '), JSON.parse(fs.readFileSync("./Config.json")).Languages[JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json")).Lang])
+                    message.delete()
+                    if (message.content.split(' ').splice(2).join(' ').length > 200){
+                        message.channel.send("You savage beast you exceeded the 200 character limit")
+                    }else
+                    SaveTTS(Play("TTS.mp3", message), message.content.split(' ').splice(2).join(' '), JSON.parse(fs.readFileSync("./Config.json")).Languages[JSON.parse(fs.readFileSync("./ServerConfigs/" + message.guild.id + ".json")).Lang])
                 }else
                 message.channel.send("It would be good if you uuuh... Provided text")
                 break
@@ -169,7 +149,7 @@ Client.on('message', message => {
                     let File
                     switch(args[0].toLowerCase()){
                         case "name":
-                            if (args.length == 2 && message.content.split(' ').splice(3).join(' ').length < 32){
+                            if (args.length > 1 && message.content.split(' ').splice(3).join(' ').length < 100){
                                 File = JSON.parse(fs.readFileSync("./CanonCharas/Users/" + message.author.id + ".json"))
                                 File.Nickname = message.content.split(' ').splice(3).join(' ')
                                 fs.writeFileSync("./CanonCharas/Users/" + message.author.id + ".json", JSON.stringify(File, null, 2));
@@ -181,16 +161,27 @@ Client.on('message', message => {
                             File = JSON.parse(fs.readFileSync("./CanonCharas/Users/" + message.author.id + ".json"))
                             File.Description = message.content.split(' ').splice(3).join(' ')
                             fs.writeFileSync("./CanonCharas/Users/" + message.author.id + ".json", JSON.stringify(File, null, 2));
+                            if (message.content.split(' ').splice(3).join(' ') == null){
+                                message.channel.send("Just an empty description? Yikes")
+                            }
+                            else
                             message.channel.send("Done!")
                             break
                         case "image":
                             if (args.length > 1){
-                                File = JSON.parse(fs.readFileSync("./CanonCharas/Users/" + message.author.id + ".json"))
-                                File.Image = message.content.split(' ').splice(3).join(' ')
-                                fs.writeFileSync("./CanonCharas/Users/" + message.author.id + ".json", JSON.stringify(File, null, 2));
-                                message.channel.send("Done!")
+                                try{
+                                    if(ValidURL(message.content.split(' ').splice(3).join(' '))){
+                                        File = JSON.parse(fs.readFileSync("./CanonCharas/Users/" + message.author.id + ".json"))
+                                        File.Image = message.content.split(' ').splice(3).join(' ')
+                                        fs.writeFileSync("./CanonCharas/Users/" + message.author.id + ".json", JSON.stringify(File, null, 2));
+                                        message.channel.send("Done! Please note that we don't and probably won't host the images, if the link goes down you'll lose your image.")
+                                    }else
+                                    message.channel.send("That\'s not quite... A valid image URL...")
+                                }catch(err){
+                                    message.channel.send("Hold up something went wrong, please inform the creator about this issue so they can fix it :sob:")
+                                }
                             }else
-                            message.channel.send("You need to provide an image url! It can be something like imgur")
+                            message.channel.send("You need to provide an image url!")
                             break
                         default:
                             message.channel.send(EditCharaMenu)
@@ -200,6 +191,7 @@ Client.on('message', message => {
                 break
             case "config":
                 if (message.member.hasPermission('MANAGE_GUILD')) {
+                    let File
                     if (args.length > 0){
                         switch(args[0].toLowerCase()){
                             case "lang":
@@ -249,7 +241,7 @@ Client.on('message', message => {
                 try {
                     if (fs.existsSync('./Audio/' + command.toLowerCase() + ".mp3")) {
                       message.delete();
-                      Play('./Audio/' + command.toLowerCase() + ".mp3")
+                      Play('./Audio/' + command.toLowerCase() + ".mp3", message)
                     }
                 }catch(err) {
                     console.error(err)
@@ -261,7 +253,7 @@ Client.on('message', message => {
     //This piece of code executes when the bot isn't ready to play sounds
     else if (message.guild.me.voice.channel != null)
     {
-        message.channel.send("Hold on a second! I'm busy. If you think this is a bug run \"soundy stop\"")
+        message.channel.send("Hold on a second! I'm busy. If you think this is a bug run \"soundy leave\"")
     }
 });
 

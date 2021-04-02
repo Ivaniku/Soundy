@@ -1,5 +1,16 @@
 const { tts, fs, path, http, https, urlm } = require("./Variables.js");
 
+
+function ValidURL(str) {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(str);
+}
+
 function DownloadURL(url, dest) {
     return new Promise((resolve, reject) => {
       const info = urlm.parse (url);
@@ -50,4 +61,30 @@ async function SaveTTS(_callback, Input, Lang){
     }
 };
 
-module.exports = { SaveTTS };
+function Play(Wtp, message) {
+  try{
+      var voiceChannel = message.member.voice.channel;
+      if (voiceChannel != null)
+      {
+          if (voiceChannel.joinable){
+              voiceChannel.join().then(connection =>
+              {
+                  message.guild.me.voice.setSelfDeaf(true)
+                  const dispatcher = connection.play(Wtp);
+                  dispatcher.on("finish", end => {
+                      voiceChannel.leave()
+                  })
+              }).catch(err => console.log(err));
+          }else
+          message.channel.send("I don't have access to that voice channel! I don't know what to do :(")
+      }else{
+          message.channel.send("You\'re not in a voice channel! I don't know what to do :(")
+      }
+  }catch(err){
+      console.log("Failed to play an audio")
+      console.log(err)
+      Client.users.cache.get("561560432100245520").send("An error ocurred playing an audio btw, lemme give you more info: \n```\n" + err + "\n```");
+  }
+}
+
+module.exports = { SaveTTS, ValidURL, Play };
